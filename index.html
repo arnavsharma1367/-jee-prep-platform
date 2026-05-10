@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JEE - Premier Engineering Entrance Exam Preparation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .cta-button {
+            background: white;
+            color: #667eea;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5rem 2rem;
+            text-align: center;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            max-width: 700px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 1rem 2.5rem;
+            border: 2px solid white;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 4rem 2rem;
+            background: #f8f9fa;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        /* Courses Section */
+        .courses {
+            padding: 4rem 2rem;
+            background: white;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .course-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .course-card:hover {
+            transform: scale(1.05);
+        }
+
+        .course-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .course-topics {
+            list-style: none;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .course-topics li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .course-topics li:last-child {
+            border-bottom: none;
+        }
+
+        /* Stats Section */
+        .stats {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .stat-item h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Mock Tests Section */
+        .mock-tests {
+            padding: 4rem 2rem;
+            background: #f8f9fa;
+        }
+
+        .test-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .test-info h4 {
+            font-size: 1.3rem;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .test-take-btn {
+            background: #667eea;
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .test-take-btn:hover {
+            background: #764ba2;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 4rem 2rem;
+            background: white;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: #555;
+        }
+
+        .testimonial-author {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        /* Footer */
+        footer {
+            background: #222;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .footer-links a:hover {
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .test-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">JEE</div>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#courses">Courses</a></li>
+            <li><a href="#tests">Mock Tests</a></li>
+            <li><a href="admin.html" class="cta-button">Admin Panel</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Master the JEE Exam</h1>
+        <p>Comprehensive preparation platform for Joint Entrance Examination (JEE) with expert-curated content, live classes, and unlimited mock tests.</p>
+        <div class="hero-buttons">
+            <button class="btn-primary" onclick="alert('Sign up feature coming soon!')">Get Started Free</button>
+            <button class="btn-secondary" onclick="alert('Demo will load shortly!')">Watch Demo</button>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h2>50K+</h2>
+                <p>Active Students</p>
+            </div>
+            <div class="stat-item">
+                <h2>500+</h2>
+                <p>Expert Videos</p>
+            </div>
+            <div class="stat-item">
+                <h2>100+</h2>
+                <p>Mock Tests</p>
+            </div>
+            <div class="stat-item">
+                <h2>95%</h2>
+                <p>Success Rate</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2 class="section-title">Why Choose JEE?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📚</div>
+                <h3>Comprehensive Content</h3>
+                <p>Complete coverage of Physics, Chemistry, and Mathematics with detailed explanations and examples.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👨‍🏫</div>
+                <h3>Expert Instructors</h3>
+                <p>Learn from experienced educators who have trained thousands of successful JEE candidates.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Performance Analytics</h3>
+                <p>Track your progress with detailed analytics and personalized recommendations.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Adaptive Learning</h3>
+                <p>Personalized study paths based on your strengths and weaknesses.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💻</div>
+                <h3>Interactive Platform</h3>
+                <p>Practice problems, live doubts sessions, and community forums.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Learn Anywhere</h3>
+                <p>Study on your desktop, tablet, or mobile device anytime, anywhere.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section class="courses" id="courses">
+        <h2 class="section-title">Our Courses</h2>
+        <div class="courses-grid">
+            <div class="course-card">
+                <h3>📐 Physics</h3>
+                <ul class="course-topics">
+                    <li>✓ Mechanics & Thermodynamics</li>
+                    <li>✓ Electromagnetism</li>
+                    <li>✓ Optics & Waves</li>
+                    <li>✓ Modern Physics</li>
+                    <li>✓ Problem Solving</li>
+                </ul>
+                <button class="btn-primary" style="width: 100%; background: white; color: #667eea;">Explore Course</button>
+            </div>
+            <div class="course-card">
+                <h3>⚗️ Chemistry</h3>
+                <ul class="course-topics">
+                    <li>✓ Inorganic Chemistry</li>
+                    <li>✓ Organic Chemistry</li>
+                    <li>✓ Physical Chemistry</li>
+                    <li>✓ Electrochemistry</li>
+                    <li>✓ Lab Techniques</li>
+                </ul>
+                <button class="btn-primary" style="width: 100%; background: white; color: #667eea;">Explore Course</button>
+            </div>
+            <div class="course-card">
+                <h3>🔢 Mathematics</h3>
+                <ul class="course-topics">
+                    <li>✓ Algebra & Trigonometry</li>
+                    <li>✓ Coordinate Geometry</li>
+                    <li>✓ Calculus</li>
+                    <li>✓ Vectors & 3D Geometry</li>
+                    <li>✓ Probability & Statistics</li>
+                </ul>
+                <button class="btn-primary" style="width: 100%; background: white; color: #667eea;">Explore Course</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mock Tests Section -->
+    <section class="mock-tests" id="tests">
+        <h2 class="section-title">Mock Tests</h2>
+        <div style="max-width: 1000px; margin: 0 auto;">
+            <div class="test-card">
+                <div class="test-info">
+                    <h4>Full Length Mock Test - 1</h4>
+                    <p>3 hours | 90 Questions | All Subjects</p>
+                </div>
+                <button class="test-take-btn" onclick="alert('Starting Mock Test 1...')">Take Test</button>
+            </div>
+            <div class="test-card">
+                <div class="test-info">
+                    <h4>Subject Wise Test - Physics</h4>
+                    <p>1.5 hours | 30 Questions</p>
+                </div>
+                <button class="test-take-btn" onclick="alert('Starting Physics Test...')">Take Test</button>
+            </div>
+            <div class="test-card">
+                <div class="test-info">
+                    <h4>Previous Year Papers</h4>
+                    <p>Last 20 years | With Solutions</p>
+                </div>
+                <button class="test-take-btn" onclick="alert('Loading Previous Year Papers...')">Access Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <h2 class="section-title">Student Success Stories</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-text">"JEE helped me score 98 percentile in my first attempt. The structured approach and expert guidance made all the difference!"</div>
+                <div class="testimonial-author">- Rahul Sharma, IIT Delhi</div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-text">"The mock tests on this platform are extremely useful and similar to the actual JEE paper. Highly recommended!"</div>
+                <div class="testimonial-author">- Priya Patel, IIT Bombay</div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-text">"I was struggling with physics, but the video lectures and doubt sessions cleared all my concepts. Great platform!"</div>
+                <div class="testimonial-author">- Arjun Verma, NIT Trichy</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">About Us</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Contact: contact@jeeprep.com</a>
+                <a href="#">Phone: +91-1234-567-890</a>
+            </div>
+            <p>&copy; 2026 JEE Preparation Platform. All rights reserved. | Empowering Engineering Dreams</p>
+        </div>
+    </footer>
+</body>
+</html>

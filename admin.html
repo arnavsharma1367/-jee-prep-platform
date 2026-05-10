@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JEE Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem;
+        }
+
+        .login-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-box h1 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .login-box .subtitle {
+            text-align: center;
+            color: #999;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.7rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.9rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.9rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .demo-info {
+            background: #f0f4ff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .admin-dashboard {
+            display: none;
+        }
+
+        .dashboard-wrapper {
+            display: flex;
+            min-height: 100vh;
+            background: #f5f5f5;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 3px solid #667eea;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin: 0;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-menu a:hover {
+            background: rgba(102, 126, 234, 0.2);
+            border-left-color: #667eea;
+            padding-left: 1.8rem;
+        }
+
+        .sidebar-menu a.active {
+            background: #667eea;
+            border-left-color: #764ba2;
+        }
+
+        .logout-btn {
+            position: absolute;
+            bottom: 2rem;
+            left: 1.5rem;
+            right: 1.5rem;
+            background: #e74c3c;
+            color: white;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: calc(100% - 3rem);
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .topbar {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .topbar h1 {
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .topbar-time {
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-top: 4px solid #667eea;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            color: #999;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .content-section {
+            display: none;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 0.8rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            margin: 0 0.3rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .table thead {
+            background: #f8f9fa;
+        }
+
+        .table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #555;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .badge-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .badge-student {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .badge-instructor {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: auto;
+                padding: 0;
+                display: flex;
+                overflow-x: auto;
+            }
+
+            .sidebar-header {
+                display: none;
+            }
+
+            .sidebar-menu {
+                display: flex;
+                width: 100%;
+            }
+
+            .sidebar-menu li {
+                flex: 1;
+            }
+
+            .sidebar-menu a {
+                padding: 0.7rem 0.5rem;
+                text-align: center;
+                font-size: 0.8rem;
+            }
+
+            .dashboard-wrapper {
+                flex-direction: column;
+                padding-bottom: 60px;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .topbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .logout-btn {
+                position: static;
+                width: 100%;
+                margin: 1rem;
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div class="login-container" id="loginPage">
+        <div class="login-box">
+            <h1>🔐 Admin Login</h1>
+            <p class="subtitle">JEE Preparation Platform</p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required value="admin" autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required value="admin123">
+                </div>
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+            <div class="demo-info">
+                <strong>Demo Credentials:</strong><br>
+                Username: <strong>admin</strong><br>
+                Password: <strong>admin123</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-dashboard" id="adminDashboard">
+        <div class="dashboard-wrapper">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h2>📊 JEE Admin</h2>
+                </div>
+                <ul class="sidebar-menu">
+                    <li><a class="menu-link active" data-section="dashboard">📈 Dashboard</a></li>
+                    <li><a class="menu-link" data-section="users">👥 Users</a></li>
+                    <li><a class="menu-link" data-section="courses">📚 Courses</a></li>
+                    <li><a class="menu-link" data-section="reports">📊 Reports</a></li>
+                </ul>
+                <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <div class="topbar">
+                    <h1 id="pageTitle">Dashboard</h1>
+                    <span class="topbar-time" id="currentTime"></span>
+                </div>
+
+                <!-- Dashboard Section -->
+                <div class="content-section active" id="dashboard">
+                    <h2 class="section-title">📊 Dashboard Overview</h2>
+                    <div class="dashboard-grid">
+                        <div class="stat-card">
+                            <h3>Total Users</h3>
+                            <div class="value" id="totalUsers">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Total Courses</h3>
+                            <div class="value" id="totalCourses">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Active Students</h3>
+                            <div class="value" id="activeStudents">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Total Instructors</h3>
+                            <div class="value" id="totalInstructors">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Monthly Revenue</h3>
+                            <div class="value">$12.5K</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Enrollment Rate</h3>
+                            <div class="value">78.5%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Section -->
+                <div class="content-section" id="users">
+                    <h2 class="section-title">👥 User Management</h2>
+                    <button class="btn btn-primary" onclick="toggleAddUserForm()">➕ Add New User</button>
+                    
+                    <div id="addUserForm" style="display: none;">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" id="userName" placeholder="Enter full name">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="userEmail" placeholder="Enter email">
+                            </div>
+                            <div class="form-group">
+                                <label>Role</label>
+                                <select id="userRole">
+                                    <option>student</option>
+                                    <option>instructor</option>
+                                    <option>admin</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select id="userStatus">
+                                    <option>active</option>
+                                    <option>inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="addUser()">✅ Save User</button>
+                        <button class="btn btn-danger" onclick="toggleAddUserForm()">❌ Cancel</button>
+                    </div>
+
+                    <div id="usersContainer"></div>
+                </div>
+
+                <!-- Courses Section -->
+                <div class="content-section" id="courses">
+                    <h2 class="section-title">📚 Course Management</h2>
+                    <button class="btn btn-primary" onclick="toggleAddCourseForm()">➕ Add New Course</button>
+                    
+                    <div id="addCourseForm" style="display: none;">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Course Name</label>
+                                <input type="text" id="courseName" placeholder="Enter course name">
+                            </div>
+                            <div class="form-group">
+                                <label>Instructor</label>
+                                <input type="text" id="courseInstructor" placeholder="Enter instructor name">
+                            </div>
+                            <div class="form-group">
+                                <label>Students Enrolled</label>
+                                <input type="number" id="courseStudents" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select id="courseStatus">
+                                    <option>active</option>
+                                    <option>inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="addCourse()">✅ Save Course</button>
+                        <button class="btn btn-danger" onclick="toggleAddCourseForm()">❌ Cancel</button>
+                    </div>
+
+                    <div id="coursesContainer"></div>
+                </div>
+
+                <!-- Reports Section -->
+                <div class="content-section" id="reports">
+                    <h2 class="section-title">📊 Reports & Analytics</h2>
+                    <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px; text-align: center;">
+                        <p style="font-size: 1.1rem; color: #667eea; margin-bottom: 1rem;">📈 Reports Coming Soon</p>
+                        <p style="color: #999;">Advanced analytics and detailed reports will be available soon.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            updateTime();
+            setInterval(updateTime, 1000);
+        });
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === 'admin' && password === 'admin123') {
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'block';
+                loadDashboard();
+            } else {
+                alert('❌ Invalid credentials! Use admin/admin123');
+            }
+        });
+
+        // Logout
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                document.getElementById('adminDashboard').style.display = 'none';
+                document.getElementById('loginPage').style.display = 'flex';
+                document.getElementById('loginForm').reset();
+            }
+        }
+
+        // Update Time
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString();
+        }
+
+        // Load Data from LocalStorage
+        function loadData() {
+            if (!localStorage.getItem('users')) {
+                localStorage.setItem('users', JSON.stringify([
+                    { id: 1, name: 'Rahul Kumar', email: 'rahul@jee.com', role: 'student', status: 'active', date: '2026-01-15' },
+                    { id: 2, name: 'Priya Singh', email: 'priya@jee.com', role: 'instructor', status: 'active', date: '2025-11-20' },
+                    { id: 3, name: 'Arjun Verma', email: 'arjun@jee.com', role: 'student', status: 'inactive', date: '2025-12-01' }
+                ]));
+            }
+            if (!localStorage.getItem('courses')) {
+                localStorage.setItem('courses', JSON.stringify([
+                    { id: 1, name: 'Physics Advanced', instructor: 'Dr. Sharma', students: 245, status: 'active' },
+                    { id: 2, name: 'Chemistry Basics', instructor: 'Dr. Patel', students: 189, status: 'active' },
+                    { id: 3, name: 'Maths - Calculus', instructor: 'Dr. Gupta', students: 156, status: 'active' }
+                ]));
+            }
+        }
+
+        // Load Dashboard
+        function loadDashboard() {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const courses = JSON.parse(localStorage.getItem('courses') || '[]');
+            
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('totalCourses').textContent = courses.length;
+            document.getElementById('activeStudents').textContent = users.filter(u => u.role === 'student' && u.status === 'active').length;
+            document.getElementById('totalInstructors').textContent = users.filter(u => u.role === 'instructor').length;
+        }
+
+        // Menu Navigation
+        document.querySelectorAll('.menu-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
+                e.target.classList.add('active');
+                
+                const section = e.target.dataset.section;
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                document.getElementById(section).classList.add('active');
+                
+                document.getElementById('pageTitle').textContent = e.target.textContent;
+
+                if (section === 'users') displayUsers();
+                if (section === 'courses') displayCourses();
+                if (section === 'dashboard') loadDashboard();
+            });
+        });
+
+        // User Management
+        function toggleAddUserForm() {
+            const form = document.getElementById('addUserForm');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            if (form.style.display === 'block') {
+                document.getElementById('userName').focus();
+            }
+        }
+
+        function addUser() {
+            const name = document.getElementById('userName').value.trim();
+            const email = document.getElementById('userEmail').value.trim();
+            const role = document.getElementById('userRole').value;
+            const status = document.getElementById('userStatus').value;
+
+            if (!name || !email) {
+                alert('❌ Please fill all fields!');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const newUser = {
+                id: Math.max(...users.map(u => u.id), 0) + 1,
+                name,
+                email,
+                role,
+                status,
+                date: new Date().toISOString().split('T')[0]
+            };
+
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+
+            alert('✅ User added successfully!');
+            document.getElementById('userName').value = '';
+            document.getElementById('userEmail').value = '';
+            toggleAddUserForm();
+            displayUsers();
+            loadDashboard();
+        }
+
+        function displayUsers() {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const container = document.getElementById('usersContainer');
+
+            if (users.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">👥</div><p>No users yet. Add your first user!</p></div>';
+                return;
+            }
+
+            const html = `
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Join Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${users.map(user => `
+                            <tr>
+                                <td>${user.name}</td>
+                                <td>${user.email}</td>
+                                <td><span class="badge badge-${user.role}">${user.role}</span></td>
+                                <td><span class="badge badge-${user.status}">${user.status}</span></td>
+                                <td>${user.date}</td>
+                                <td>
+                                    <button class="btn btn-danger btn-small" onclick="deleteUser(${user.id})">Delete</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            container.innerHTML = html;
+        }
+
+        function deleteUser(id) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const updated = users.filter(u => u.id !== id);
+                localStorage.setItem('users', JSON.stringify(updated));
+                alert('✅ User deleted successfully!');
+                displayUsers();
+                loadDashboard();
+            }
+        }
+
+        // Course Management
+        function toggleAddCourseForm() {
+            const form = document.getElementById('addCourseForm');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            if (form.style.display === 'block') {
+                document.getElementById('courseName').focus();
+            }
+        }
+
+        function addCourse() {
+            const name = document.getElementById('courseName').value.trim();
+            const instructor = document.getElementById('courseInstructor').value.trim();
+            const students = parseInt(document.getElementById('courseStudents').value) || 0;
+            const status = document.getElementById('courseStatus').value;
+
+            if (!name || !instructor) {
+                alert('❌ Please fill all fields!');
+                return;
+            }
+
+            const courses = JSON.parse(localStorage.getItem('courses') || '[]');
+            const newCourse = {
+                id: Math.max(...courses.map(c => c.id), 0) + 1,
+                name,
+                instructor,
+                students,
+                status
+            };
+
+            courses.push(newCourse);
+            localStorage.setItem('courses', JSON.stringify(courses));
+
+            alert('✅ Course added successfully!');
+            document.getElementById('courseName').value = '';
+            document.getElementById('courseInstructor').value = '';
+            document.getElementById('courseStudents').value = '';
+            toggleAddCourseForm();
+            displayCourses();
+            loadDashboard();
+        }
+
+        function displayCourses() {
+            const courses = JSON.parse(localStorage.getItem('courses') || '[]');
+            const container = document.getElementById('coursesContainer');
+
+            if (courses.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📚</div><p>No courses yet. Add your first course!</p></div>';
+                return;
+            }
+
+            const html = `
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Course Name</th>
+                            <th>Instructor</th>
+                            <th>Students</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${courses.map(course => `
+                            <tr>
+                                <td>${course.name}</td>
+                                <td>${course.instructor}</td>
+                                <td>${course.students}</td>
+                                <td><span class="badge badge-${course.status}">${course.status}</span></td>
+                                <td>
+                                    <button class="btn btn-danger btn-small" onclick="deleteCourse(${course.id})">Delete</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            container.innerHTML = html;
+        }
+
+        function deleteCourse(id) {
+            if (confirm('Are you sure you want to delete this course?')) {
+                const courses = JSON.parse(localStorage.getItem('courses') || '[]');
+                const updated = courses.filter(c => c.id !== id);
+                localStorage.setItem('courses', JSON.stringify(updated));
+                alert('✅ Course deleted successfully!');
+                displayCourses();
+                loadDashboard();
+            }
+        }
+    </script>
+</body>
+</html>
